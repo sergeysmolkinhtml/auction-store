@@ -34,7 +34,8 @@
                                 Edit
                             </a>
 
-                            <form action="" method="POST" onsubmit="return confirm('Are your sure?');"
+                            <form action="{{route('user.categories.destroy',$category)}}"
+                                  method="POST" onsubmit="return confirm('Are your sure?');"
                                   style="display: inline-block;">
                                 <input type="hidden" name="_method" value="DELETE">
                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">

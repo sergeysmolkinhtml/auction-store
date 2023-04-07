@@ -2,10 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateLotRequest;
-use App\Http\Requests\UpdateLotRequest;
-use App\Models\Category;
-use App\Models\Lot;
+use App\Http\Requests\
+{
+    CreateLotRequest,
+    UpdateLotRequest
+};
+
+use App\Models\
+{
+    Category,
+    Lot
+};
+
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
