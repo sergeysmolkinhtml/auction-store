@@ -30,7 +30,7 @@ class LotController extends Controller
             });
         }
 
-        $lots = $query->paginate(10);
+        $lots = $query->paginate(20);
         return view('lots.index', compact('lots'));
     }
 

@@ -1,50 +1,30 @@
 @extends('base')
 
 @section('content')
-    <form action="{{route('user.lots.store')}}" method="POST">
+    <form action="{{route('user.categories.store')}}" method="POST">
         @csrf
         <div class="card">
-            <div class="card-header">Create lot</div>
+            <div class="card-header">Create category</div>
 
             <div class="card-body">
                 <div class="form-group">
-                    <label class="required" for="title">Title</label>
-                    <input class="form-control {{ $errors->has('title') ? 'is-invalid' : '' }}"
+                    <label class="form-group" for="name">Title</label>
+                    <input class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}"
                            type="text"
-                           name="title"
-                           id="title"
-                           value="{{ old('title') }}" >
-                    @if($errors->has('title'))
+                           name="name"
+                           id="name"
+                           value="{{ old('name') }}" >
+
+                    @if($errors->has('name'))
                         <div class="invalid-feedback">
-                            {{ $errors->first('title') }}
+                            {{ $errors->first('name') }}
                         </div>
                     @endif
 
                     <span class="help-block"> </span>
                 </div>
-
-                <div class="form-group">
-                    <label class="required" for="description">Description</label>
-                    <input class="form-control {{ $errors->has('description') ? 'is-invalid' : '' }}" type="text"
-                           name="description" id="description" value="{{ old('description') }}" >
-                    @if($errors->has('description'))
-                        <div class="invalid-feedback">
-                            {{ $errors->first('description') }}
-                        </div>
-                    @endif
-                    <span class="help-block"> </span>
-                </div>
-
-                <label for="categories">Category:</label>
-                <select name="categories" id="categories" multiple>
-                    @foreach ($categories as $category)
-                        <option value="{{ $category->id }}">{{ $category->name }}</option>
-                    @endforeach
-                </select>
-
             </div>
         </div>
-
 
         <div class="card-footer">
             <button class="btn btn-primary" type="submit">
