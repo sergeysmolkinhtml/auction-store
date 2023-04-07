@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateLotRequest;
+use App\Http\Requests\UpdateLotRequest;
 use App\Models\Category;
 use App\Models\Lot;
 use Dflydev\DotAccessData\Data;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class LotController extends Controller
@@ -23,8 +25,8 @@ class LotController extends Controller
         // category filter
         if ($request->has('categories')) {
             $categories = explode(',', $request->get('categories'));
-            $query->whereHas('categories', function ($query) use ($categories) {
-                $query->whereIn('id', $categories);
+            $query->whereHas('categories', function ($que) use ($categories) {
+                $que->whereIn('id', $categories);
             });
         }
 
@@ -35,25 +37,19 @@ class LotController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
-
+        // for select
         $categories = Category::all();
-
         return view('lots.create', compact('categories'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CreateLotRequest $request): RedirectResponse
     {
-        $lot = new Lot();
-        $lot->title = $request->input('title');
-        $lot->description = $request->input('description');
-        $lot->save();
-
-
+        $lot = Lot::create($request->validated());
         $categories = $request->input('categories');
 
         $lot->categories()->attach($categories);
@@ -64,9 +60,8 @@ class LotController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Lot $lot)
+    public function show(Lot $lot): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
-
         $lot->load('categories');
 
         return view('lots.show', compact('lot'));
@@ -75,27 +70,22 @@ class LotController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Lot $lot)
+    public function edit(Lot $lot): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
         $categories = Category::all();
 
         $lot->load('categories');
-
         return view('lots.edit', compact('lot', 'categories'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request,  Lot $lot)
+    public function update(UpdateLotRequest $request,  Lot $lot): RedirectResponse
     {
-        $lot->name = $request->input('name');
-        $lot->description = $request->input('description');
-        $lot->save();
-
+        Lot::update($request->validated());
         $categories = $request->input('categories');
         $lot->categories()->sync($categories);
-
 
         return redirect()->route('lots.show', $lot);
     }
