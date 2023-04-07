@@ -2,18 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\
-{
-    CreateLotRequest,
-    UpdateLotRequest
-};
-
-use App\Models\
-{
-    Category,
-    Lot
-};
-
+use App\Http\Requests\{CreateLotRequest, UpdateLotRequest};
+use App\Models\{Category, Lot};
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
@@ -33,13 +23,14 @@ class LotController extends Controller
         if ($request->has('categories')) {
             $categories = explode(',', $request->input('categories'));
 
-            $query->whereHas('categories', function ($que) use ($categories) {
-                $que->whereIn('id', $categories); //orWhere....depends on requirements;
-            });
+            $search_results = $query->whereHas('categories', function ($que) use ($categories) {
+                $que->whereIn('name', $categories); //orWhere....depends on requirements;
+            })->with('categories')->get();
+
         }
 
         $lots = $query->paginate(20);
-        return view('lots.index', compact('lots'));
+        return view('lots.index', compact('lots', 'search_results'));
     }
 
     /**
