@@ -24,7 +24,7 @@
                 <td>{{ $lot->created_at->toDateString() }}</td>
                 <td>{{ $lot->updated_at->toDateString() }}</td>
                 <td>
-                    <a class="btn btn-xs btn-info" href="">
+                    <a class="btn btn-xs btn-info" href="{{route('user.lots.edit',$lot)}}">
                         Edit
                     </a>
                     @can('delete')

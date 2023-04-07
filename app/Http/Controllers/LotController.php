@@ -23,7 +23,7 @@ class LotController extends Controller
 
         // category filter
         if ($request->has('categories')) {
-            $categories = explode(',', $request->get('categories'));
+            $categories = explode(',', $request->input('categories'));
             $query->whereHas('categories', function ($que) use ($categories) {
                 $que->whereIn('id', $categories);
             });
@@ -71,7 +71,6 @@ class LotController extends Controller
     public function edit(Lot $lot): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
         $categories = Category::all();
-
         $lot->load('categories');
         return view('lots.edit', compact('lot', 'categories'));
     }
@@ -81,11 +80,11 @@ class LotController extends Controller
      */
     public function update(UpdateLotRequest $request,  Lot $lot): RedirectResponse
     {
-        Lot::update($request->validated());
+        $lot->update($request->validated());
         $categories = $request->input('categories');
         $lot->categories()->sync($categories);
 
-        return redirect()->route('lots.show', $lot);
+        return redirect()->route('user.lots.show', $lot);
     }
 
     /**
@@ -94,5 +93,6 @@ class LotController extends Controller
     public function destroy(Lot $lot)
     {
         $lot->delete();
+        return redirect()->route('user.lots.index');
     }
 }
