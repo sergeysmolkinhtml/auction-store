@@ -22,7 +22,7 @@ class LotController extends Controller
         // category filter
         if ($request->has('categories')) {
             $categories = explode(',', $request->input('categories'));
-
+                                    // join needed
             $search_results = $query->whereHas('categories', function ($que) use ($categories) {
                 $que->whereIn('name', $categories); //orWhere....depends on requirements;
             })->with('categories')->get();
