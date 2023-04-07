@@ -4,23 +4,19 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Lot extends Model
 {
     use HasFactory;
 
-    protected $table = 'lot';
+    protected $table = 'lots';
 
-    protected $fillable = [
-        'title',
-        'description',
-        'category_id',
-        'created_at',
-        'updated_at',
-    ];
+    protected $fillable = ['title', 'description'];
 
-    public function category()
+    public function categories(): BelongsToMany
     {
-        $this->hasMany(Lot::class);
+        return $this->belongsToMany(Category::class,'lot_category');
     }
+
 }

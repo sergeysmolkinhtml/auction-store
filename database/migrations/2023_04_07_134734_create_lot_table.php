@@ -11,18 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('lot', function (Blueprint $table) {
+        Schema::create('lots', function (Blueprint $table) {
             $table->id();
-            $table->string('title')->nullable();
-            $table->mediumText('description')->nullable();
-            $table->foreignId('category_id')
-                    ->unique()
-                    ->references('id')
-                    ->on('categories');
-
-
+            $table->string('title');
+            $table->text('description');
             $table->timestamps();
         });
+
     }
 
     /**

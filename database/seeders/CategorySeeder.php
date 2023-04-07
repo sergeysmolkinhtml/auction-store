@@ -20,8 +20,7 @@ class CategorySeeder extends Seeder
             $cName = "Category #" . $i;
 
             $categories[] = [
-                'title'     => $cName,
-                'slug'      => Str::slug($cName),
+                'name'     => $cName,
             ];
         }
 
