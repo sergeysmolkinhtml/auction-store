@@ -6,7 +6,6 @@ use App\Http\Requests\CreateLotRequest;
 use App\Http\Requests\UpdateLotRequest;
 use App\Models\Category;
 use App\Models\Lot;
-use Dflydev\DotAccessData\Data;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
@@ -63,7 +62,6 @@ class LotController extends Controller
     public function show(Lot $lot): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
         $lot->load('categories');
-
         return view('lots.show', compact('lot'));
     }
 
