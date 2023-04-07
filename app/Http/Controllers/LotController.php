@@ -24,8 +24,9 @@ class LotController extends Controller
         // category filter
         if ($request->has('categories')) {
             $categories = explode(',', $request->input('categories'));
+
             $query->whereHas('categories', function ($que) use ($categories) {
-                $que->whereIn('id', $categories);
+                $que->whereIn('id', $categories); //orWhere....depends on requirements;
             });
         }
 
@@ -90,7 +91,7 @@ class LotController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Lot $lot)
+    public function destroy(Lot $lot): RedirectResponse
     {
         $lot->delete();
         return redirect()->route('user.lots.index');
