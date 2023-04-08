@@ -16,7 +16,7 @@ class Lot extends Model
 
     public function categories(): BelongsToMany
     {
-        return $this->belongsToMany(Category::class,'lot_category');
+        return $this->belongsToMany(Category::class,'lot_category','lot_id','category_id');
     }
 
 }

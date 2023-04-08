@@ -23,14 +23,14 @@ class LotController extends Controller
         if ($request->has('categories')) {
             $categories = explode(',', $request->input('categories'));
                                     // join needed
-            $search_results = $query->whereHas('categories', function ($que) use ($categories) {
+           $query->whereHas('categories', function ($que) use ($categories) {
                 $que->whereIn('name', $categories); //orWhere....depends on requirements;
             })->with('categories')->get();
 
         }
 
         $lots = $query->paginate(20);
-        return view('lots.index', compact('lots', 'search_results'));
+        return view('lots.index', compact('lots'));
     }
 
     /**
@@ -39,7 +39,7 @@ class LotController extends Controller
     public function create(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
         // for select
-        $categories = Category::all();
+        $categories = Category::select('id','name')->get();
         return view('lots.create', compact('categories'));
     }
 
@@ -50,7 +50,6 @@ class LotController extends Controller
     {
         $lot = Lot::create($request->validated());
         $categories = $request->input('categories');
-
         $lot->categories()->attach($categories);
 
         return redirect()->route('user.lots.show', $lot);
@@ -70,7 +69,7 @@ class LotController extends Controller
      */
     public function edit(Lot $lot): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
-        $categories = Category::all();
+        $categories = Category::select('name')->get();
         $lot->load('categories');
         return view('lots.edit', compact('lot', 'categories'));
     }
@@ -81,9 +80,7 @@ class LotController extends Controller
     public function update(UpdateLotRequest $request,  Lot $lot): RedirectResponse
     {
         $lot->update($request->validated());
-        $categories = $request->input('categories');
-        $lot->categories()->sync($categories);
-
+        $lot->categories()->syncWithoutDetaching($request->input('categories'));
         return redirect()->route('user.lots.show', $lot);
     }
 

@@ -13,6 +13,8 @@ class Category extends Model
         'name'
     ];
 
+    protected $guarded = false;
+
     public function lots(): BelongsToMany
     {
         return $this->belongsToMany(Lot::class,'lot_category');

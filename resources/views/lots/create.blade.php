@@ -36,7 +36,9 @@
             </div>
 
             <label for="categories">Category:</label>
-            <select name="categories" id="categories" multiple>
+            <select name="categories[]"
+                    id="categories"
+                    multiple>
                 @foreach ($categories as $category)
                     <option value="{{ $category->id }}">{{ $category->name }}</option>
                 @endforeach

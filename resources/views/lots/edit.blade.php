@@ -48,21 +48,24 @@
                                 multiple
                         >
                             @foreach ($categories as $category)
-                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                <option value="{{ $category->id }}" {{ in_array($category->id, $lot->categories->pluck('id')->toArray()) ? 'selected' : '' }}>
+                                    {{ $category->name }}
+                                </option>
                             @endforeach
                         </select>
                     </div>
-                    <form action="{{ route('user.lots.destroy', $lot) }}" method="POST" onsubmit="return confirm('Are your sure?');" style="display: inline-block;">
-                        <input type="hidden" name="_method" value="DELETE">
-                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                        <input type="submit" class="btn btn-sm btn-danger" value="Delete">
-                    </form>
+
                     <button class="btn btn-primary" type="submit">
                         Save
                     </button>
                 </div>
             </form>
         </div>
+        <form action="{{ route('user.lots.destroy', $lot) }}" method="POST" onsubmit="return confirm('Are your sure?');" style="display: inline-block;">
+            <input type="hidden" name="_method" value="DELETE">
+            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+            <input type="submit" class="btn btn-sm btn-danger" value="Delete">
+        </form>
     </div>
 
 @endsection

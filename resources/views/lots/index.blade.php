@@ -35,7 +35,11 @@
                     <tr>
                         <td>{{ $lot->title }}</td>
                         <td>{{ $lot->description }}</td>
-                        <td>{{ $lot->category_id }}</td>
+                        <td>
+                            @foreach($lot->categories as $category)
+                                {{ $category->name }}
+                            @endforeach</td>
+
                         <td>{{ $lot->created_at->toDateString() }}</td>
                         <td>{{ $lot->updated_at->toDateString() }}</td>
                         <td>

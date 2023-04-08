@@ -22,9 +22,10 @@ class CreateLotRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title'       => ['required', 'string', 'max:255'],
-            'description' => ['required', 'string', 'max:255'],
-            'category'    => ['integer'],
+            'title'         => ['required', 'string', 'max:255'],
+            'description'   => ['required', 'string', 'max:255'],
+            'categories'    => ['nullable','array'],
+            'categories.*'  => ['nullable','integer','exists:categories,id'],
         ];
     }
 }
