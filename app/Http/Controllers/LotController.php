@@ -69,7 +69,7 @@ class LotController extends Controller
      */
     public function edit(Lot $lot): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
-        $categories = Category::select('name')->get();
+        $categories = Category::select('id','name')->get();
         $lot->load('categories');
         return view('lots.edit', compact('lot', 'categories'));
     }
