@@ -2,7 +2,7 @@
 
 namespace App\Filters;
 
-class LotFilter extends QueryFilter
+class LotCategoriesFilter extends QueryFilter
 {
     public function category_id($id = null)
     {
@@ -14,7 +14,6 @@ class LotFilter extends QueryFilter
     public function search_field($search_string = '')
     {
         return $this->builder
-            ->where('name', 'LIKE', '%' . $search_string . '%')
-            ->orWhere('description', 'LIKE', '%' . $search_string . '%');
+            ->where('lot_id', 'LIKE', '%' . $search_string . '%');
     }
 }

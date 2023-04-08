@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Filters\LotFilter;
+use App\Filters\LotCategoriesFilter;
 use App\Http\Requests\{CreateLotRequest, UpdateLotRequest};
-use App\Models\{Category, Lot};
+use App\Models\{Category, Lot, LotCategory};
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
@@ -15,11 +15,12 @@ class LotController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(LotFilter $filter): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+    public function index(LotCategoriesFilter $filter): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
-        $lots = Lot::filter($filter)->paginate(20);
+        $lots = Lot::with('categories')->get();
+        $filteredLots = LotCategory::filter($filter)->get();
 
-        return view('lots.index', compact('lots'));
+        return view('lots.index', compact('lots','filteredLots'));
     }
 
     /**
@@ -68,8 +69,13 @@ class LotController extends Controller
      */
     public function update(UpdateLotRequest $request,  Lot $lot): RedirectResponse
     {
-        $lot->update($request->validated());
-        $lot->categories()->syncWithoutDetaching($request->input('categories'));
+        try {
+            $lot->update($request->validated());
+            $lot->categories()->syncWithoutDetaching($request->input('categories'));
+        } catch (\Exception $e){
+            return $e->getMessage();
+        }
+
         return redirect()->route('user.lots.show', $lot);
     }
 

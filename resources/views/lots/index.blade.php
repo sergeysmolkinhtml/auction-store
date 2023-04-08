@@ -18,7 +18,6 @@
                     {{ session('status') }}
                 </div>
             @endif
-
             <table class="table table-responsive-sm table-striped">
                 <thead>
                 <tr>
@@ -31,6 +30,29 @@
                 </tr>
                 </thead>
                 <tbody>
+                @if(isset($filteredLots))
+                    @foreach($filteredLots as $flot)
+                    <tr>
+                        <td>{{ $flot->title }}</td>
+                        <td>{{ $flot->description }}</td>
+                        <td>
+
+                        <td>{{ $flot->created_at->toDateString() }}</td>
+                        <td>{{ $flot->updated_at->toDateString() }}</td>
+                        <td>
+                            <a class="btn btn-xs btn-info" href="{{route('user.lots.edit',$flot->id)}}">
+                                Edit
+                            </a>
+                            <form action="" method="POST" onsubmit="return confirm('Are your sure?');"
+                                  style="display: inline-block;">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                <input type="submit" class="btn btn-xs btn-danger" value="Delete">
+                            </form>
+                        </td>
+                    </tr>
+                    @endforeach
+                @else
                 @foreach($lots as $lot)
                     <tr>
                         <td>{{ $lot->title }}</td>
@@ -55,6 +77,7 @@
                         </td>
                     </tr>
                 @endforeach
+                @endif
                 <form action="{{route('user.lots.index')}}" method="get">
                     <div class="mb-3">
                         <div class="form-label">Filter category</div>
@@ -71,11 +94,7 @@
                                 id="">
                             <option></option>
                             @foreach($lot->categories as $cat)
-                                <option value="{{$cat->id}}" @if(isset($_GET['category_id']))
-                                    @if($_GET['category_id'] == $category->id)
-                                        selected
-                                    @endif
-                                    @endif>
+                                <option value="{{$cat->id}}">
                                     {{$cat->name}}</option>
                             @endforeach
                         </select>

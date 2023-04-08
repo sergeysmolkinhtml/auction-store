@@ -21,8 +21,4 @@ class Lot extends Model
         return $this->belongsToMany(Category::class,'lot_category','lot_id','category_id');
     }
 
-    public function scopeFilter(Builder $builder, QueryFilter $filter)
-    {
-        return $filter->apply($builder);
-    }
 }
