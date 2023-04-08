@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Filters\LotCategoriesFilter;
 use App\Http\Requests\{CreateLotRequest, UpdateLotRequest};
 use App\Models\{Category, Lot, LotCategory};
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
+use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 
 class LotController extends Controller
@@ -15,12 +15,18 @@ class LotController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(LotCategoriesFilter $filter): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+    public function index(Request $request ): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
-        $lots = Lot::with('categories')->get();
-        $filteredLots = LotCategory::filter($filter)->paginate(20);
+        $lots = Lot::query()
+            ->when(request()->has('categories'),function ($query) use ($request) {
+               $query->withWhereHas('categories', function ($query) use ($request){
+                  $categories = explode(',',$request->input('categories'));
+                  $query->whereIn('category_id', $categories);
+               });
+            })->get();
 
-        return view('lots.index', compact('lots','filteredLots'));
+        $categories = Category::select('id','name')->get();
+        return view('lots.index', compact('lots','categories'));
     }
 
     /**
