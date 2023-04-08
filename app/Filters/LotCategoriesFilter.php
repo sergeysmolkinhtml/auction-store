@@ -14,6 +14,7 @@ class LotCategoriesFilter extends QueryFilter
     public function search_field($search_string = '')
     {
         return $this->builder
-            ->where('lot_id', 'LIKE', '%' . $search_string . '%');
+            ->where('category_id', 'LIKE', '%' . $search_string . '%')
+            ->orWhere('lot_id', 'LIKE', '%' . $search_string . '%');
     }
 }

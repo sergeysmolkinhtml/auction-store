@@ -18,7 +18,7 @@ class LotController extends Controller
     public function index(LotCategoriesFilter $filter): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
         $lots = Lot::with('categories')->get();
-        $filteredLots = LotCategory::filter($filter)->get();
+        $filteredLots = LotCategory::filter($filter)->paginate(20);
 
         return view('lots.index', compact('lots','filteredLots'));
     }

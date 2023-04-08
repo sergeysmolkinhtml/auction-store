@@ -18,7 +18,7 @@ class LotCategory extends Model
         'product_id'
     ];
 
-    public function scopeFilter(Builder $builder, QueryFilter $filter)
+    public function scopeFilter(Builder $builder, QueryFilter $filter): Builder
     {
         return $filter->apply($builder);
     }
