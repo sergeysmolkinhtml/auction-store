@@ -15,16 +15,9 @@ class LotController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request ): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+    public function index(Request $request): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
-        $lots = Lot::query()
-            ->when(request()->has('categories'),function ($query) use ($request) {
-               $query->withWhereHas('categories', function ($query) use ($request){
-                  $categories = explode(',',$request->input('categories'));
-                  $query->whereIn('category_id', $categories);
-               });
-            })->get();
-
+        $lots = Lot::query()->categoriesId($request);
         $categories = Category::select('id','name')->get();
         return view('lots.index', compact('lots','categories'));
     }
@@ -34,7 +27,6 @@ class LotController extends Controller
      */
     public function create(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
-        // for select
         $categories = Category::select('id','name')->get();
         return view('lots.create', compact('categories'));
     }
@@ -48,7 +40,8 @@ class LotController extends Controller
         $categories = $request->input('categories');
         $lot->categories()->attach($categories);
 
-        return redirect()->route('user.lots.show', $lot);
+        return redirect()->route('user.lots.show', $lot)
+            ->with(['msg' => 'Successfully stored lot']);
     }
 
     /**
@@ -82,7 +75,8 @@ class LotController extends Controller
             return $e->getMessage();
         }
 
-        return redirect()->route('user.lots.show', $lot);
+        return redirect()->route('user.lots.show', $lot)
+            ->with(['msg' => 'Successfully updated lot']);
     }
 
     /**
@@ -91,6 +85,7 @@ class LotController extends Controller
     public function destroy(Lot $lot): RedirectResponse
     {
         $lot->delete();
-        return redirect()->route('user.lots.index');
+        return redirect()->route('user.lots.index')
+            ->with(['msg' => 'Successfully deleted lot']);
     }
 }

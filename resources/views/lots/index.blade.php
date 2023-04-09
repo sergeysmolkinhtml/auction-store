@@ -54,36 +54,33 @@
                 </tbody>
             </table>
             <form action="{{route('user.lots.index')}}" method="get">
-                {{--Search form--}}
-                <div class="mb-3">
-                    <label for="FormControlInput1" class="form-label">Search</label>
-                    <input name="search_field"
-                           @if(isset($_GET['search_field']))
-                               value="{{$_GET['search_field']}}"
-                           @endif
-                           type="text"
-                           class="form-control"
-                           id="FormControlInput1"
-                           placeholder="Type something">
-                </div>
                 {{-- Choose category --}}
                 <div class="mb-3">
-                    <label for="FormControlInput1" class="form-label">Choose category</label>
-                    <select name="category_id"
-                            class="form-select form-select-sm"
-                            aria-label=".form-select-sm example">
-                        <option></option>
-                        @foreach($categories as $cat)
-                            <option value="{{$cat->id}}">
-                                {{$cat->name}}
-                            </option>
-                        @endforeach
-                    </select>
+                    @foreach($categories as $cat)
+                    <label  for="categories">
+                    <input type="checkbox" id="{{$cat->id}}" name="categories" value="{{$cat->id}}">
+                            {{$cat->name}}
+                    </label>
+                        <br>
+                    @endforeach
+
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
+            <?php
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                $categories = $_POST['category'];
+                if (!empty($categories)) {
+                    $queryString = http_build_query(array('categories' => implode(',', $categories)));
+                    $url = $_SERVER['REQUEST_URI'] . '?' . $queryString;
+                    header('Location: ' . $url);
+                    exit();
+                }
+            }
+            ?>
+
             <p>Filtered lots</p>
-          {{$lots}}
+        {{$lots->pluck('title')}}
         </div>
     </div>
 @endsection
