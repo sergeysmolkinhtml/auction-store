@@ -57,27 +57,15 @@
                 {{-- Choose category --}}
                 <div class="mb-3">
                     @foreach($categories as $cat)
-                    <label  for="categories">
-                    <input type="checkbox" id="{{$cat->id}}" name="categories" value="{{$cat->id}}">
+                    <label for="categories">
+                    <input type="checkbox" id="categories" name="categories" value="{{$cat->id}}">
                             {{$cat->name}}
                     </label>
-                        <br>
+                    <br>
                     @endforeach
-
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
-            <?php
-            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                $categories = $_POST['category'];
-                if (!empty($categories)) {
-                    $queryString = http_build_query(array('categories' => implode(',', $categories)));
-                    $url = $_SERVER['REQUEST_URI'] . '?' . $queryString;
-                    header('Location: ' . $url);
-                    exit();
-                }
-            }
-            ?>
 
             <p>Filtered lots</p>
         {{$lots->pluck('title')}}
