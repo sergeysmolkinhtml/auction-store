@@ -18,7 +18,6 @@ class LotController extends Controller
     public function index(Request $request): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
         $lots = Lot::query()->categoriesId($request);
-        /*dd(explode(',',$request->input('categories')));*/
         $categories = Category::select('id','name')->get();
         return view('lots.index', compact('lots','categories'));
     }
